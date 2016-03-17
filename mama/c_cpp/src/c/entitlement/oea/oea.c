@@ -50,7 +50,7 @@ void MAMACALLTYPE entitlementCheckingSwitchCallback (oeaClient* client,
 mama_status
 oeaEntitlementBridge_registerSubjectContext(SubjectContext* ctx)
 {
-	oeaEntitlementSubscriptionHandle* oeaSubHandle = (oeaSubscription*)ctx->mEntitlementSubscription->mImpl;
+	oeaEntitlementSubscriptionHandle* oeaSubHandle = (oeaEntitlementSubscriptionHandle*)ctx->mEntitlementSubscription->mImpl;
 
     oeaSubscription_addEntitlementCode (oeaSubHandle->mOeaSubscription, ctx->mEntitleCode);
     oeaSubscription_open (oeaSubHandle->mOeaSubscription);
