@@ -2165,8 +2165,6 @@ mamaSubscription_processWildCardMsg( mamaSubscription subscription,
                                      const char* topic,
                                      void* topicClosure)
 {
-    mamaBridgeImpl* bridge  = NULL;
-    int             allowed = 0;
 
     if ( (gMamaLogLevel >= MAMA_LOG_LEVEL_FINEST) ||
             (mamaSubscription_checkDebugLevel (subscription,
@@ -2174,27 +2172,10 @@ mamaSubscription_processWildCardMsg( mamaSubscription subscription,
     {
         const char* text = mamaMsg_toString(msg);
         mama_forceLog (MAMA_LOG_LEVEL_FINEST, 
-                "mamaSubscription_processMsg(): %s%s msg = %s subsc (%p)",
+                "mamaSubscription_processWildCardMsg(): %s%s msg = %s subsc (%p)",
                 userSymbolFormatted, 
                 text, 
                 subscription);
-    }
-
-    bridge = mamaSubscription_getBridgeImpl(subscription);
-
-    if (!mamaBridgeImpl_areEntitlementsDeferred(bridge))
-    {
-        allowed = self->mSubjectContext.mEntitlementBridge->isAllowed(self->mSubjectContext.mEntitlementSubscription, 
-                                                            self->mSubjectContext.mSymbol);
-        if (!allowed)
-        {
-            self->mWcCallbacks.onError (self,
-                    MAMA_STATUS_NOT_ENTITLED,
-                    NULL,
-                    self->mUserSymbol,
-                    self->mClosure);
-            return MAMA_STATUS_NOT_ENTITLED;
-        }
     }
 
     self->mWcCallbacks.onMsg (
@@ -2204,7 +2185,7 @@ mamaSubscription_processWildCardMsg( mamaSubscription subscription,
            self->mClosure, 
            topicClosure);
 
-    /*Do not access subscription here as it mey have been deleted/destroyed*/
+    /* Do not access subscription here as it may have been deleted/destroyed */
     return MAMA_STATUS_OK;
 }
     
